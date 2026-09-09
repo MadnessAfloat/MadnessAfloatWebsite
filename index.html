@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Madness Afloat: Lovecraftian Naval Action Game</title>
+<!-- Open Graph / Discord / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://madnessafloat.com/">
+<meta property="og:title" content="Madness Afloat — A Lovecraftian Naval Action Game">
+<meta property="og:description" content="Pilot a customizable steamship across a cursed Polynesian archipelago. Face forbidden waters, carry dangerous cargo, and decide how much of your sanity you're willing to lose. Coming to Steam in 2027.">
+<meta property="og:image" content="heroimage.png">
+<meta property="og:image:width" content="1920">
+<meta property="og:image:height" content="1080">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Madness Afloat — A Lovecraftian Naval Action Game">
+<meta name="twitter:description" content="Pilot a customizable steamship across a cursed Polynesian archipelago. Face forbidden waters, carry dangerous cargo, and decide how much of your sanity you're willing to lose. Coming to Steam in 2027.">
+<meta name="twitter:image" content="heroimage.png">
+
+<!-- Standard description -->
+<meta name="description" content="Pilot a customizable steamship across a cursed Polynesian archipelago. Face forbidden waters, carry dangerous cargo, and decide how much of your sanity you're willing to lose. Coming to Steam in 2027.">
+<link rel="icon" type="image/jpeg" href="Madness_Afloat_Logo.jpg">
+<link rel="shortcut icon" href="Madness_Afloat_Logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1623;
+    --bg-alt: #0c1420;
+    --bg-deep: #080e18;
+    --accent: #c9963f;
+    --accent-glow: rgba(201, 150, 63, 0.35);
+    --text: #d4cfc8;
+    --muted: #8a8a8a;
+    --border: rgba(201, 150, 63, 0.25);
+    --divider: rgba(201, 150, 63, 0.4);
+    --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  img, video { max-width: 100%; display: block; }
+
+  /* ---------- Section header / title reveal system ---------- */
+  .section-header {
+    max-width: 900px;
+    margin: 0 auto 32px;
+    padding: 0 24px;
+  }
+  .section-title {
+    display: flex;
+    align-items: center;
+    font-family: "Pirata One", serif;
+    font-size: 2.4rem;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    margin: 0 0 18px;
+    text-wrap: balance;
+  }
+  .section-title.lg { font-size: 3rem; }
+  @media (max-width: 1024px) {
+    .section-title.lg { font-size: 2.2rem; }
+  }
+  .section-title .glyph {
+    font-size: 1rem;
+    margin-right: 10px;
+    display: inline-block;
+    transform: scale(0);
+    opacity: 0;
+    transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.25s ease;
+    transition-delay: 0s;
+  }
+  .section-title.lg .glyph { font-size: 1.4rem; }
+  .section-title .title-text {
+    display: inline-block;
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+    transition-delay: 0.1s;
+  }
+  .scroll-reveal.in-view .glyph { transform: scale(1); opacity: 1; }
+  .scroll-reveal.in-view .title-text { opacity: 1; transform: translateX(0); }
+
+  .lead-rule {
+    width: 0;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0;
+    margin-bottom: 14px;
+    transition: width 0.3s ease-out, opacity 0.3s ease-out;
+    transition-delay: 0.1s;
+  }
+  .scroll-reveal.in-view .lead-rule { width: 40px; opacity: 0.4; }
+
+  .divider {
+    position: relative;
+    width: 100%;
+    height: 1px;
+    background: var(--divider);
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 0.4s ease-out;
+    transition-delay: 0.2s;
+  }
+  .divider.divider-lg { height: 1.5px; }
+  .divider .dot {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0;
+    transform: translateY(-50%) scale(0);
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+    transition-delay: 0.2s;
+  }
+  .scroll-reveal.in-view .divider { transform: scaleX(1); }
+  .scroll-reveal.in-view .divider .dot { opacity: 1; transform: translateY(-50%) scale(1); }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    border-radius: 4px;
+    padding: 12px 28px;
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    transition: 0.2s;
+    cursor: pointer;
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+  .btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%);
+    background-size: 200% 100%;
+    background-position: -200% 0;
+    transition: background-position 0.5s;
+    pointer-events: none;
+  }
+  .btn:hover::after { background-position: 200% 0; }
+  .btn-primary { background: var(--accent); color: var(--bg); border: none; }
+  .btn-primary:hover { box-shadow: 0 0 18px var(--accent-glow); background: #dba94d; }
+  .btn-ghost { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+  .btn-ghost:hover { box-shadow: 0 0 10px rgba(201, 150, 63, 0.2); background: rgba(201, 150, 63, 0.08); }
+
+  /* ---------- Loading screen ---------- */
+  #loader {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.5s ease;
+  }
+  #loader.hidden { opacity: 0; pointer-events: none; }
+  .loader-flash {
+    position: absolute;
+    inset: 0;
+    background: #ffffff;
+    opacity: 0;
+    pointer-events: none;
+    animation: flashPulse 0.3s ease 2.4s forwards;
+  }
+  @keyframes flashPulse { 0% { opacity: 0; } 50% { opacity: 0.15; } 100% { opacity: 0; } }
+  #loader img {
+    max-width: 420px;
+    width: 80%;
+    filter: brightness(1.1);
+    animation: loaderPulse 1.8s ease-in-out infinite, wobble 3s ease-in-out infinite;
+  }
+  @keyframes loaderPulse { 0%, 100% { opacity: 0.85; } 50% { opacity: 1; } }
+  @keyframes wobble { 0% { transform: rotate(-1deg); } 50% { transform: rotate(1deg); } 100% { transform: rotate(-1deg); } }
+  .loader-bar-track {
+    width: 280px;
+    height: 3px;
+    background: rgba(201, 150, 63, 0.2);
+    margin-top: 28px;
+    overflow: hidden;
+  }
+  .loader-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--accent);
+    animation: loaderFill 2.4s ease-out forwards;
+  }
+  @keyframes loaderFill { from { width: 0%; } to { width: 100%; } }
+  .loader-text {
+    margin-top: 16px;
+    font-family: "Inter", sans-serif;
+    font-weight: 300;
+    font-size: 0.8rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+  }
+  .loader-text .dots span {
+    display: inline-block;
+    animation: dotPulse 1.4s ease-in-out infinite;
+    opacity: 0.3;
+  }
+  .loader-text .dots span:nth-child(1) { animation-delay: 0s; }
+  .loader-text .dots span:nth-child(2) { animation-delay: 0.2s; }
+  .loader-text .dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes dotPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+  /* ---------- Nav ---------- */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: transparent;
+    backdrop-filter: blur(0);
+    border-bottom: 1px solid rgba(201, 150, 63, 0.3);
+    transition: background 0.3s ease, backdrop-filter 0.3s ease, box-shadow 0.3s ease;
+  }
+  nav::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--noise);
+    opacity: 0.05;
+    pointer-events: none;
+  }
+  nav.scrolled {
+    background: rgba(15, 22, 35, 0.92);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 2px 24px rgba(0,0,0,0.6), inset 0 -1px 0 rgba(201,150,63,0.2);
+  }
+  .nav-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-title { display: flex; align-items: center; gap: 8px; font-family: "Pirata One", serif; font-size: 1.1rem; color: var(--accent); letter-spacing: 0.08em; }
+  .nav-title svg { flex-shrink: 0; opacity: 0.8; }
+  .nav-center { display: flex; align-items: center; }
+  .nav-center a { font-family: "Inter", sans-serif; font-weight: 400; font-size: 0.9rem; color: var(--text); transition: color 0.2s; }
+  .nav-center a:hover { color: var(--accent); }
+  .nav-sep { color: var(--accent); opacity: 0.6; margin: 0 18px; font-size: 1rem; }
+  .hamburger { display: none; background: none; border: none; color: var(--accent); font-size: 1.5rem; cursor: pointer; line-height: 1; padding: 4px; }
+
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-deep);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    transform: translateY(-100%);
+    transition: transform 0.35s ease;
+  }
+  .mobile-menu.open { transform: translateY(0); }
+  .mobile-menu a { font-family: "Inter", sans-serif; font-size: 1.2rem; color: var(--text); }
+  .mobile-menu a:hover { color: var(--accent); }
+
+  @media (max-width: 768px) {
+    .nav-center, .nav-cta { display: none; }
+    .hamburger { display: block; }
+    .nav-logo { height: 30px !important; }
+    .nav-brand-text { font-size: 1rem !important; }
+  }
+
+  /* ---------- Hero ---------- */
+  #hero {
+    height: 100vh;
+    min-height: 560px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  #hero .hero-bg {
+    position: absolute;
+    top: -10%;
+    left: 0;
+    width: 100%;
+    height: 120%;
+    object-fit: cover;
+    object-position: center;
+    will-change: transform;
+  }
+  #hero .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(15,22,35,0.3) 0%, rgba(15,22,35,0.05) 40%, rgba(15,22,35,0.5) 80%, rgba(15,22,35,1) 100%);
+  }
+  .particle {
+    position: absolute;
+    bottom: 0;
+    border-radius: 50%;
+    background: var(--accent);
+    pointer-events: none;
+    animation: particleFloat linear infinite;
+    will-change: transform, opacity;
+  }
+  @keyframes particleFloat {
+    0% { transform: translate(0, 0); opacity: 0; }
+    10% { opacity: var(--op, 0.5); }
+    90% { opacity: var(--op, 0.5); }
+    100% { transform: translate(var(--drift, 0px), -110vh); opacity: 0; }
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 24px;
+    margin-top: 45vh;
+  }
+  .hero-content img {
+    max-width: 480px;
+    width: 90%;
+    margin: 0 auto;
+    animation: float 4s ease-in-out infinite;
+    will-change: transform;
+  }
+  @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+  .hero-tagline { font-family: "Pirata One", serif; font-size: 1.2rem; color: #d4cfc8; margin-top: 16px; text-wrap: balance; letter-spacing: 0.02em; text-align: center; text-shadow: 0 2px 8px rgba(0,0,0,0.9); }
+  .hero-ctas { display: flex; gap: 16px; margin-top: 28px; flex-wrap: wrap; justify-content: center; }
+  .btn-hero-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(201, 150, 63, 0.12);
+    border: 1px solid rgba(201, 150, 63, 0.8);
+    border-radius: 4px;
+    padding: 14px 44px;
+    color: #c9963f;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.25s ease;
+  }
+  .btn-hero-primary:hover {
+    background: rgba(201,150,63,0.2);
+    border-color: #c9963f;
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(201,150,63,0.3);
+  }
+  .scroll-caret {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--accent);
+    font-size: 1.5rem;
+    animation: bounce 1.5s infinite;
+    z-index: 2;
+  }
+  @keyframes bounce { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 10px); } }
+
+  /* ---------- Generic section ---------- */
+  section { padding: 90px 0; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .center-text { text-align: center; }
+
+  /* ---------- About ---------- */
+  .about-copy { max-width: 720px; margin: 0 auto 0; text-align: center; }
+  .about-copy p {
+    margin: 0 0 18px;
+    font-family: "Inter", sans-serif;
+    font-weight: 300;
+    color: var(--text);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  }
+  .scroll-reveal.in-view .about-copy p:nth-of-type(1) { opacity: 1; transform: translateY(0); transition-delay: 0.1s; }
+  .scroll-reveal.in-view .about-copy p:nth-of-type(2) { opacity: 1; transform: translateY(0); transition-delay: 0.18s; }
+  .about-pull {
+    font-family: "Pirata One", serif !important;
+    font-size: 1.1rem;
+    color: var(--accent) !important;
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+  }
+  .about-pull::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, transparent 40%, rgba(255,220,100,0.15) 50%, transparent 60%);
+    background-size: 200% 100%;
+    animation: shimmerSweep 4s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes shimmerSweep { 0% { background-position: -150% 0; } 100% { background-position: 150% 0; } }
+
+  /* ---------- Feature blocks ---------- */
+  .feature-block { position: relative; padding: 120px 0; }
+  .feature-block:nth-of-type(odd) { background-color: var(--bg); background-image: radial-gradient(ellipse at 30% 50%, rgba(201,150,63,0.03) 0%, transparent 70%); }
+  .feature-block:nth-of-type(even) { background: var(--bg-alt); }
+  .feature-block:nth-of-type(even)::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--noise);
+    opacity: 0.025;
+    pointer-events: none;
+  }
+
+  .reveal-line {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    pointer-events: none;
+    z-index: 5;
+  }
+  @keyframes revealSweep {
+    0% { transform: scaleX(0); transform-origin: left; opacity: 1; }
+    55% { transform: scaleX(1); transform-origin: left; opacity: 1; }
+    100% { transform: scaleX(1); opacity: 0; }
+  }
+  .scroll-reveal.in-view .reveal-line { animation: revealSweep 0.25s ease forwards; animation-delay: 0s; }
+
+  .feature-inner {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 80px;
+  }
+  .feature-inner.reverse { flex-direction: row-reverse; }
+
+  .feature-inner::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    width: 2px;
+    height: 60%;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  .feature-inner::after {
+    content: '\25C6';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent);
+    font-size: 10px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  .feature-block:nth-of-type(odd) .feature-inner::before, .feature-block:nth-of-type(odd) .feature-inner::after { right: 0; }
+  .feature-block:nth-of-type(even) .feature-inner::before, .feature-block:nth-of-type(even) .feature-inner::after { left: 0; }
+  .scroll-reveal.in-view .feature-inner::before { opacity: 0.15; }
+  .scroll-reveal.in-view .feature-inner::after { opacity: 0.5; }
+
+  .feature-media { flex: 1 1 55%; min-width: 0; }
+  .video-frame {
+    position: relative;
+    max-width: 720px;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    margin: 0 auto;
+    cursor: crosshair;
+    opacity: 0;
+    transform: translateX(-60px);
+    box-shadow: 0 0 0 rgba(0,0,0,0), 0 0 0 rgba(201,150,63,0);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out, box-shadow 0.3s ease;
+    transition-delay: 0s, 0s, 0.2s;
+  }
+  .video-frame.enter-right { transform: translateX(60px); }
+  .scroll-reveal.in-view .video-frame {
+    opacity: 1;
+    transform: translateX(0);
+    box-shadow: 0 0 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,150,63,0.1);
+  }
+  .scroll-reveal.in-view .video-frame:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 44px rgba(0,0,0,0.65), 0 0 0 1px rgba(201,150,63,0.18);
+  }
+  @media (max-width: 860px) { .video-frame { max-width: 100%; } }
+
+  .video-frame video {
+    width: 100%;
+    display: block;
+    aspect-ratio: 16 / 9;
+    object-fit: contain;
+    image-rendering: auto;
+    border-radius: 8px;
+    border: 1px solid rgba(201, 150, 63, 0.2);
+    transition: filter 0.3s ease;
+  }
+  .corner { position: absolute; width: 0; height: 0; opacity: 0.5; pointer-events: none; transition: width 0.15s ease, height 0.15s ease; }
+  .corner-tl { top: -4px; left: -4px; border-top: 2px solid var(--accent); border-left: 2px solid var(--accent); transition-delay: 0.05s; }
+  .corner-tr { top: -4px; right: -4px; border-top: 2px solid var(--accent); border-right: 2px solid var(--accent); transition-delay: 0.1s; }
+  .corner-bl { bottom: -4px; left: -4px; border-bottom: 2px solid var(--accent); border-left: 2px solid var(--accent); transition-delay: 0.15s; }
+  .corner-br { bottom: -4px; right: -4px; border-bottom: 2px solid var(--accent); border-right: 2px solid var(--accent); transition-delay: 0.2s; }
+  .scroll-reveal.in-view .corner { width: 12px; height: 12px; }
+  .video-frame:hover .corner { opacity: 0.9; }
+
+  .feature-text { flex: 1 1 45%; min-width: 0; max-width: 520px; }
+  .feature-text p {
+    margin: 0 0 20px;
+    font-family: "Inter", sans-serif;
+    font-weight: 300;
+    font-size: 1.1rem;
+    line-height: 1.85;
+    color: var(--text);
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out, color 0.5s ease-out;
+  }
+  .feature-text .divider-lg + p { margin-top: 28px; }
+  .feature-text .lore {
+    font-family: "Pirata One", serif;
+    font-size: 1.2rem;
+    color: rgba(201, 150, 63, 0);
+    margin: 0 0 4px;
+  }
+  .scroll-reveal.in-view .feature-text p { opacity: 1; transform: translateY(0); transition-delay: 0.1s; }
+  .scroll-reveal.in-view .feature-text p:nth-of-type(2) { transition-delay: 0.15s; }
+  .scroll-reveal.in-view .feature-text p:nth-of-type(3) { transition-delay: 0.2s; }
+  .scroll-reveal.in-view .feature-text .lore { color: rgba(201, 150, 63, 1); }
+  .scroll-reveal.in-view .feature-text p.lore:nth-of-type(2) { transition-delay: 0.18s; }
+  .scroll-reveal.in-view .feature-text p.lore:nth-of-type(3) { transition-delay: 0.2s; }
+
+  @media (max-width: 860px) {
+    .feature-inner, .feature-inner.reverse { flex-direction: column; }
+    .feature-text { max-width: none; text-align: left; }
+    .feature-inner::before, .feature-inner::after { display: none; }
+  }
+  @media (max-width: 768px) {
+    .video-frame { transform: translateX(-30px); }
+    .video-frame.enter-right { transform: translateX(30px); }
+    .section-title .title-text { transform: translateX(-20px); }
+    .feature-text p { transform: translateY(15px); }
+  }
+
+  /* ---------- Features list ---------- */
+  #features-list { background: var(--bg-alt); }
+  .feature-list-items { max-width: 700px; margin: 0 auto; list-style: none; padding: 0; }
+  .feature-item {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(201, 150, 63, 0.1);
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  }
+  .feature-item:last-child { border-bottom: none; }
+  .feature-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(201, 150, 63, 0.06);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s ease;
+    z-index: 0;
+  }
+  .feature-item:hover::before { transform: scaleX(1); }
+  .item-inner { position: relative; z-index: 1; display: flex; align-items: baseline; padding: 14px 0; transition: transform 0.2s ease; }
+  .feature-item:hover .item-inner { transform: translateX(6px); }
+  .bullet {
+    color: var(--accent);
+    font-size: 0.8rem;
+    margin-right: 12px;
+    flex-shrink: 0;
+    display: inline-block;
+    transform: rotate(-90deg) scale(0);
+    transition: transform 0.3s ease-out;
+  }
+  .feature-item:hover .bullet { transform: rotate(15deg) scale(1.2); transition: transform 0.2s ease; }
+  .feature-list-items b { font-family: "Inter", sans-serif; font-weight: 500; color: #ffffff; transition: letter-spacing 0.2s ease; }
+  .feature-item:hover b { letter-spacing: 0.02em; }
+  .feature-list-items .sep { color: var(--muted); margin: 0 6px; }
+  .feature-list-items span.desc { font-family: "Inter", sans-serif; font-weight: 300; color: var(--text); }
+
+  .scroll-reveal.in-view .feature-item { opacity: 1; transform: translateX(0); }
+  .feature-item:nth-child(1) { transition-delay: 0s; }
+  .feature-item:nth-child(2) { transition-delay: 0.05s; }
+  .feature-item:nth-child(3) { transition-delay: 0.1s; }
+  .feature-item:nth-child(4) { transition-delay: 0.15s; }
+  .feature-item:nth-child(5) { transition-delay: 0.2s; }
+  .feature-item:nth-child(6) { transition-delay: 0.25s; }
+  .feature-item:nth-child(7) { transition-delay: 0.3s; }
+  .feature-item:nth-child(1) .bullet { transition-delay: 0s; }
+  .feature-item:nth-child(2) .bullet { transition-delay: 0.05s; }
+  .feature-item:nth-child(3) .bullet { transition-delay: 0.1s; }
+  .feature-item:nth-child(4) .bullet { transition-delay: 0.15s; }
+  .feature-item:nth-child(5) .bullet { transition-delay: 0.2s; }
+  .feature-item:nth-child(6) .bullet { transition-delay: 0.25s; }
+  .feature-item:nth-child(7) .bullet { transition-delay: 0.3s; }
+  .scroll-reveal.in-view .feature-item .bullet { transform: rotate(0deg) scale(1); }
+
+  @media (max-width: 768px) {
+    .feature-item { transform: translateX(-10px); }
+  }
+
+  /* ---------- Wishlist CTA ---------- */
+  #wishlist {
+    min-height: 600px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #wishlist .wishlist-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    opacity: 1;
+    z-index: 0;
+    mix-blend-mode: normal;
+  }
+  #wishlist::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(15, 22, 35, 0.75) 0%, rgba(15, 22, 35, 0.45) 40%, rgba(15, 22, 35, 0.75) 100%);
+  }
+  .wishlist-content { position: relative; z-index: 2; text-align: center; padding: 100px 24px; }
+  .wishlist-content h2 { font-family: "Pirata One", serif; font-size: 3rem; color: var(--accent); margin: 0; text-wrap: balance; text-shadow: 0 2px 12px rgba(0,0,0,0.8); }
+  .wishlist-content p { font-family: "Inter", sans-serif; font-weight: 300; font-size: 1rem; color: var(--text); max-width: 480px; margin: 16px auto 0; text-align: center; line-height: 1.8; text-shadow: 0 1px 6px rgba(0,0,0,0.9); }
+
+  .btn-download {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: transparent;
+    border: 1px solid rgba(201, 150, 63, 0.7);
+    border-radius: 4px;
+    padding: 16px 56px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+    margin-top: 28px;
+  }
+  .btn-download::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%);
+    background-size: 200% 100%;
+    background-position: -200% 0;
+    transition: background-position 0.5s;
+    pointer-events: none;
+  }
+  .btn-download:hover::after { background-position: 200% 0; }
+  .btn-download:hover {
+    background: rgba(201,150,63,0.08);
+    border-color: #c9963f;
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(201,150,63,0.2);
+  }
+  .btn-icon { color: #c9963f; font-size: 1.1rem; line-height: 1; display: block; }
+  .btn-label { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.95rem; letter-spacing: 0.14em; text-transform: uppercase; color: #c9963f; display: block; }
+  .btn-sub { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 0.68rem; letter-spacing: 0.1em; color: rgba(201,150,63,0.55); display: block; }
+
+  /* ---------- Footer ---------- */
+  footer { position: relative; background: var(--bg-deep); border-top: 1px solid rgba(201, 150, 63, 0.15); padding: 32px 48px; overflow: hidden; }
+  footer::before { content: ''; position: absolute; inset: 0; background-image: var(--noise); opacity: 0.03; pointer-events: none; }
+  .footer-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .footer-copy { font-family: "Inter", sans-serif; font-weight: 300; font-size: 0.8rem; color: var(--muted); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-family: "Inter", sans-serif; font-weight: 400; color: var(--accent); }
+  .footer-links a:hover { text-decoration: underline; }
+  .footer-capsule img { max-height: 48px; border-radius: 4px; opacity: 0.7; }
+
+  @media (max-width: 768px) {
+    .footer-inner { flex-direction: column; text-align: center; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= LOADING SCREEN ================= -->
+<div id="loader">
+  <div class="loader-flash"></div>
+  <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3095020/d3e4594e9900813184214c3e23248fdfb554b19f/header.jpg?t=1782801743" alt="Madness Afloat logo">
+  <div class="loader-bar-track">
+    <div class="loader-bar-fill"></div>
+  </div>
+  <div class="loader-text">Setting sail<span class="dots"><span>.</span><span>.</span><span>.</span></span></div>
+</div>
+
+<!-- ================= NAV ================= -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#hero" style="display:flex; align-items:center; gap:12px; text-decoration:none; padding-left:24px;">
+      <img
+        class="nav-logo"
+        src="Madness_Afloat_Logo.jpg"
+        alt="Madness Afloat logo"
+        style="height:38px; width:auto; object-fit:contain; display:block; border-radius:3px;"
+      >
+      <span class="nav-brand-text" style="font-family:'Pirata One', serif; font-size:1.2rem; color:#c9963f; letter-spacing:0.08em; white-space:nowrap;">
+        Madness Afloat
+      </span>
+    </a>
+    <div class="nav-center">
+      <a href="#about">About</a>
+      <span class="nav-sep">&middot;</span>
+      <a href="#features">Features</a>
+      <span class="nav-sep">&middot;</span>
+      <a href="#wishlist">Wishlist</a>
+    </div>
+    <a class="btn btn-primary nav-cta" href="https://store.steampowered.com/app/3095020/Madness_Afloat/" target="_blank" rel="noopener">Wishlist on Steam</a>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">&#9776;</button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about">About</a>
+  <a href="#features">Features</a>
+  <a href="#wishlist">Wishlist</a>
+  <a class="btn btn-primary" href="https://store.steampowered.com/app/3095020/Madness_Afloat/" target="_blank" rel="noopener">Wishlist on Steam</a>
+</div>
+
+<!-- ================= HERO ================= -->
+<section id="hero">
+  <img class="hero-bg" src="heroimage.png" alt="Madness Afloat steamship facing a monstrous shape on the open sea" loading="lazy">
+  <div class="hero-overlay"></div>
+  <div class="hero-content" id="heroContent">
+    <p class="hero-tagline">Sail deeper. Risk more. Decide how much you're willing to lose.</p>
+    <div class="hero-ctas">
+      <a href="https://github.com" target="_blank" rel="noopener" class="btn-hero-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;">
+          <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/>
+        </svg>
+        <span>Download</span>
+      </a>
+    </div>
+  </div>
+  <div class="scroll-caret">&#8595;</div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section id="about" class="scroll-reveal">
+  <div class="section-header">
+    <div class="section-title"><span class="glyph">&#10022;</span><span class="title-text">About This Game</span></div>
+    <div class="divider"><span class="dot"></span></div>
+  </div>
+  <div class="container center-text">
+    <div style="max-width:800px; aspect-ratio:16/9; margin:0 auto 40px auto; border-radius:8px; overflow:hidden; box-shadow:0 0 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,150,63,0.15);">
+      <video autoplay muted loop playsinline style="width:100%; height:100%; display:block; object-fit:contain;">
+        <source src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3095020/extras/86c82d3d09ce7fee723e99e25373f530.webm?t=1782801743" type="video/webm">
+      </video>
+    </div>
+    <div class="about-copy">
+      <p>Madness Afloat is a Lovecraftian naval action game set in an alternate 1899. Pilot customizable steamships across an open world Polynesian archipelago scarred by forbidden waters, uncover dangerous missions, and survive voyages where every decision leaves lasting consequences.</p>
+      <p class="about-pull">Sail deeper, risk more, and decide how much you're willing to lose.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FEATURES ================= -->
+<div id="features">
+
+  <!-- Block 1 -->
+  <section class="feature-block scroll-reveal">
+    <div class="reveal-line"></div>
+    <div class="feature-inner">
+      <div class="feature-media">
+        <div class="video-frame">
+          <video src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3095020/extras/225003578e0b2bb06f16106f42130453.webm?t=1782801743" autoplay muted loop playsinline loading="lazy" style="width: 100%; display: block; aspect-ratio: 16 / 9; object-fit: contain;"></video>
+          <span class="corner corner-tl"></span><span class="corner corner-tr"></span>
+          <span class="corner corner-bl"></span><span class="corner corner-br"></span>
+        </div>
+      </div>
+      <div class="feature-text">
+        <div class="lead-rule"></div>
+        <div class="section-title lg"><span class="glyph">&#10022;</span><span class="title-text">Sail Dangerous Waters</span></div>
+        <div class="divider divider-lg"><span class="dot"></span></div>
+        <p>Explore an open world of contested ports, shifting routes, and hostile seas. Missions are handcrafted and escalate in danger the deeper you push into forbidden waters.</p>
+        <p class="lore">Turning back is safer.</p>
+        <p class="lore">Going on is a choice you may regret.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Block 2 -->
+  <section class="feature-block scroll-reveal">
+    <div class="reveal-line"></div>
+    <div class="feature-inner reverse">
+      <div class="feature-media">
+        <div class="video-frame enter-right">
+          <video src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3095020/extras/bbdf44a6c4e4dbb872664e09f31bcde0.webm?t=1782801743" autoplay muted loop playsinline loading="lazy" style="width: 100%; display: block; aspect-ratio: 16 / 9; object-fit: contain;"></video>
+          <span class="corner corner-tl"></span><span class="corner corner-tr"></span>
+          <span class="corner corner-bl"></span><span class="corner corner-br"></span>
+        </div>
+      </div>
+      <div class="feature-text">
+        <div class="lead-rule"></div>
+        <div class="section-title lg"><span class="glyph">&#10022;</span><span class="title-text">Carry Cursed Cargo</span></div>
+        <div class="divider divider-lg"><span class="dot"></span></div>
+        <p>Your cargo hold is both lifeline and liability. Transport volatile, fragile, and cursed goods using a spatial grid where placement matters. Mistakes can trigger chain reactions, sanity loss or catastrophic detonations mid-voyage.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Block 3 -->
+  <section class="feature-block scroll-reveal">
+    <div class="reveal-line"></div>
+    <div class="feature-inner">
+      <div class="feature-media">
+        <div class="video-frame">
+          <video src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3095020/extras/51370bd663f002e0b8a286c3803ab909.webm?t=1782801743" autoplay muted loop playsinline loading="lazy" style="width: 100%; display: block; aspect-ratio: 16 / 9; object-fit: contain;"></video>
+          <span class="corner corner-tl"></span><span class="corner corner-tr"></span>
+          <span class="corner corner-bl"></span><span class="corner corner-br"></span>
+        </div>
+      </div>
+      <div class="feature-text">
+        <div class="lead-rule"></div>
+        <div class="section-title lg"><span class="glyph">&#10022;</span><span class="title-text">Sanity Is a Temptation</span></div>
+        <div class="divider divider-lg"><span class="dot"></span></div>
+        <p>Dread sharpens the senses until it breaks them. As sanity erodes, hallucinations creep into view: false threats, warped horizons, impossible shapes. Push deeper into madness to glimpse hidden paths and forbidden places unseen by sane eyes.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Block 4 -->
+  <section class="feature-block scroll-reveal">
+    <div class="reveal-line"></div>
+    <div class="feature-inner reverse">
+      <div class="feature-media">
+        <div class="video-frame enter-right">
+          <video src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3095020/extras/710b38de09b9150821fbd8eda5d3ac6f.webm?t=1782801743" autoplay muted loop playsinline loading="lazy" style="width: 100%; display: block; aspect-ratio: 16 / 9; object-fit: contain;"></video>
+          <span class="corner corner-tl"></span><span class="corner corner-tr"></span>
+          <span class="corner corner-bl"></span><span class="corner corner-br"></span>
+        </div>
+      </div>
+      <div class="feature-text">
+        <div class="lead-rule"></div>
+        <div class="section-title lg"><span class="glyph">&#10022;</span><span class="title-text">Shape Your Crew</span></div>
+        <div class="divider divider-lg"><span class="dot"></span></div>
+        <p>Customize your steamship with modular weapons and systems. Recruit named officers from rival factions, each shaped by traits, trauma and loyalty.</p>
+        <p class="lore">Your choices open doors and close others permanently.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Block 5 -->
+  <section class="feature-block scroll-reveal">
+    <div class="reveal-line"></div>
+    <div class="feature-inner">
+      <div class="feature-media">
+        <div class="video-frame">
+          <video src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3095020/extras/bca7acf99eeb7fc3aa4ab25d22db1e33.webm?t=1782801743" autoplay muted loop playsinline loading="lazy" style="width: 100%; display: block; aspect-ratio: 16 / 9; object-fit: contain;"></video>
+          <span class="corner corner-tl"></span><span class="corner corner-tr"></span>
+          <span class="corner corner-bl"></span><span class="corner corner-br"></span>
+        </div>
+      </div>
+      <div class="feature-text">
+        <div class="lead-rule"></div>
+        <div class="section-title lg"><span class="glyph">&#10022;</span><span class="title-text">Solo First. Co&#8209;Op When You Dare.</span></div>
+        <div class="divider divider-lg"><span class="dot"></span></div>
+        <p>Madness Afloat is fully playable solo, built for atmosphere and tension. Optional co-op expeditions let multiple captains sail together in high-risk dives where coordination is survival.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================= GAME FEATURES LIST ================= -->
+<section id="features-list" class="scroll-reveal">
+  <div class="section-header">
+    <div class="section-title"><span class="glyph">&#10022;</span><span class="title-text">Game Features</span></div>
+    <div class="divider"><span class="dot"></span></div>
+  </div>
+  <div class="container">
+    <ul class="feature-list-items">
+      <li class="feature-item"><span class="item-inner"><span class="bullet">&#10022;</span><b>Open World Exploration</b><span class="sep">&mdash;</span><span class="desc">Sail freely between ports, routes and dangerous waters</span></span></li>
+      <li class="feature-item"><span class="item-inner"><span class="bullet">&#10022;</span><b>Handcrafted Missions</b><span class="sep">&mdash;</span><span class="desc">Authored voyages with escalating tension and consequences</span></span></li>
+      <li class="feature-item"><span class="item-inner"><span class="bullet">&#10022;</span><b>Customizable Steamships</b><span class="sep">&mdash;</span><span class="desc">Modular weapons, systems and upgrades</span></span></li>
+      <li class="feature-item"><span class="item-inner"><span class="bullet">&#10022;</span><b>Cursed Cargo System</b><span class="sep">&mdash;</span><span class="desc">Spatial cargo management where placement and damage matter</span></span></li>
+      <li class="feature-item"><span class="item-inner"><span class="bullet">&#10022;</span><b>Sanity as Risk-Reward</b><span class="sep">&mdash;</span><span class="desc">Hallucinations and instability grant power at a cost</span></span></li>
+      <li class="feature-item"><span class="item-inner"><span class="bullet">&#10022;</span><b>Named Officers &amp; Factions</b><span class="sep">&mdash;</span><span class="desc">Recruit crew, build reputation, shape long-term outcomes</span></span></li>
+      <li class="feature-item"><span class="item-inner"><span class="bullet">&#10022;</span><b>Solo First, Optional Co-Op</b><span class="sep">&mdash;</span><span class="desc">Play entirely solo or take on co-op expeditions</span></span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= WISHLIST CTA ================= -->
+<section id="wishlist">
+  <img class="wishlist-bg" id="wishlistBg"
+       src="9e7073f2128324d12a70e10a3c0fa699.jpg"
+       alt="Madness Afloat crew" loading="lazy">
+  <div class="wishlist-content">
+    <h2>The Deep Awaits</h2>
+    <p>Some captains turned back. Most didn't make it.<br>You've been warned. Now download and find out why.</p>
+    <a href="https://github.com" target="_blank" rel="noopener" class="btn-download">
+      <span class="btn-icon">&#8595;</span>
+      <span class="btn-label">Download</span>
+      <span class="btn-sub">Free Beta &middot; Windows</span>
+    </a>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-copy">&copy; 2026 Dynamic Box. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="https://store.steampowered.com/app/3095020/Madness_Afloat/" target="_blank" rel="noopener">Steam Page</a>
+      <a href="privacy.html" style="font-family:Inter, sans-serif; color:#c9963f; text-decoration:none; font-size:0.85rem;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Privacy Policy</a>
+    </div>
+    <div class="footer-capsule">
+      <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3095020/c7ef15234bc213905355ea5b62102e9715044187/capsule_616x353.jpg?t=1782801743" alt="Madness Afloat capsule thumbnail" loading="lazy">
+    </div>
+  </div>
+</footer>
+
+<script>
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Loading screen
+  window.addEventListener('load', function () {
+    setTimeout(function () {
+      var loader = document.getElementById('loader');
+      loader.classList.add('hidden');
+      setTimeout(function () { loader.style.display = 'none'; }, 500);
+    }, 2800);
+  });
+
+  var nav = document.getElementById('nav');
+  var heroBg = document.querySelector('.hero-bg');
+
+  // Feature block cache for scroll-linked effects
+  var featureBlocks = Array.prototype.map.call(document.querySelectorAll('.feature-block'), function (el, idx) {
+    return {
+      block: el,
+      video: el.querySelector('.video-frame video'),
+      text: el.querySelector('.feature-text'),
+      isOdd: (idx % 2 === 0)
+    };
+  });
+
+  function updateFeatureEffects() {
+    if (reduceMotion) return;
+    var vh = window.innerHeight;
+    var desktopParallax = window.innerWidth > 900;
+    featureBlocks.forEach(function (fb) {
+      var rect = fb.block.getBoundingClientRect();
+      if (rect.bottom < -200 || rect.top > vh + 200) return;
+
+      var centerDist = Math.min(1, Math.abs((rect.top + rect.height / 2) - vh / 2) / (vh / 2));
+
+      if (fb.video) {
+        var brightness = Math.max(0.75, 1.05 - 0.30 * centerDist);
+        var contrast = 1.02 - 0.02 * centerDist;
+        fb.video.style.filter = 'brightness(' + brightness.toFixed(2) + ') contrast(' + contrast.toFixed(2) + ')';
+      }
+
+      if (fb.text) {
+        if (desktopParallax) {
+          var offset = ((rect.top + rect.height / 2) - vh / 2) * 0.08;
+          offset = Math.max(-40, Math.min(40, offset));
+          fb.text.style.transform = 'translateY(' + offset.toFixed(1) + 'px)';
+        } else {
+          fb.text.style.transform = '';
+        }
+      }
+
+      if (fb.isOdd) {
+        var progress = Math.min(1, Math.max(0, (vh - rect.top) / (vh + rect.height)));
+        var pos = 30 + progress * 40;
+        fb.block.style.backgroundImage = 'radial-gradient(ellipse at ' + pos.toFixed(1) + '% 50%, rgba(201,150,63,0.03) 0%, transparent 70%)';
+      }
+    });
+  }
+
+  var ticking = false;
+  function handleScroll() {
+    if (window.scrollY > 60) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+
+    if (!reduceMotion && heroBg && window.innerWidth >= 768) {
+      var y = window.scrollY;
+      if (y < window.innerHeight * 1.4) {
+        heroBg.style.transform = 'translateY(' + (y * 0.4) + 'px)';
+      }
+    }
+
+    updateFeatureEffects();
+    ticking = false;
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) {
+      requestAnimationFrame(handleScroll);
+      ticking = true;
+    }
+  });
+  handleScroll();
+
+  // Mobile hamburger menu
+  var hamburger = document.getElementById('hamburger');
+  var mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', function () {
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', function () {
+      mobileMenu.classList.remove('open');
+    });
+  });
+
+  // Scroll-triggered entrance choreography (section-level; children respond via CSS)
+  var revealObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.scroll-reveal').forEach(function (el) {
+    revealObserver.observe(el);
+  });
+
+  // Ambient drifting particles in hero
+  function initParticles() {
+    if (reduceMotion) return;
+    var hero = document.getElementById('hero');
+    var anchor = document.getElementById('heroContent');
+    if (!hero || !anchor) return;
+    var count = 14;
+    for (var i = 0; i < count; i++) {
+      var p = document.createElement('div');
+      p.className = 'particle';
+      var size = (Math.random() * 2 + 2).toFixed(1);
+      var left = (Math.random() * 100).toFixed(1);
+      var duration = (Math.random() * 8 + 8).toFixed(1);
+      var delay = (Math.random() * duration * -1).toFixed(1);
+      var drift = (Math.random() * 80 - 40).toFixed(0);
+      var op = (Math.random() * 0.3 + 0.3).toFixed(2);
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.left = left + '%';
+      p.style.animationDuration = duration + 's';
+      p.style.animationDelay = delay + 's';
+      p.style.setProperty('--drift', drift + 'px');
+      p.style.setProperty('--op', op);
+      hero.insertBefore(p, anchor);
+    }
+  }
+  initParticles();
+</script>
+
+</body>
+</html>

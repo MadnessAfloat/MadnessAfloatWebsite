@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — Madness Afloat</title>
+<meta name="description" content="Privacy policy for Madness Afloat, a Lovecraftian naval action game by Dynamic Box.">
+<link rel="icon" type="image/jpeg" href="Madness_Afloat_Logo.jpg">
+<link rel="shortcut icon" href="Madness_Afloat_Logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1623;
+    --bg-deep: #080e18;
+    --accent: #c9963f;
+    --text: #d4cfc8;
+    --muted: #8a8a8a;
+    --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; }
+  img { max-width: 100%; display: block; }
+
+  /* ---------- Buttons (shared with index.html) ---------- */
+  .btn {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    border-radius: 4px;
+    padding: 12px 28px;
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    transition: 0.2s;
+    cursor: pointer;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%);
+    background-size: 200% 100%;
+    background-position: -200% 0;
+    transition: background-position 0.5s;
+    pointer-events: none;
+  }
+  .btn:hover::after { background-position: 200% 0; }
+  .btn-primary { background: var(--accent); color: var(--bg); border: none; }
+  .btn-primary:hover { box-shadow: 0 0 18px rgba(201, 150, 63, 0.35); background: #dba94d; }
+
+  /* ---------- Nav (identical to index.html) ---------- */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: transparent;
+    backdrop-filter: blur(0);
+    border-bottom: 1px solid rgba(201, 150, 63, 0.3);
+    transition: background 0.3s ease, backdrop-filter 0.3s ease, box-shadow 0.3s ease;
+  }
+  nav::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--noise);
+    opacity: 0.05;
+    pointer-events: none;
+  }
+  nav.scrolled {
+    background: rgba(15, 22, 35, 0.92);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 2px 24px rgba(0,0,0,0.6), inset 0 -1px 0 rgba(201,150,63,0.2);
+  }
+  .nav-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-center { display: flex; align-items: center; }
+  .nav-center a { font-family: "Inter", sans-serif; font-weight: 400; font-size: 0.9rem; color: var(--text); transition: color 0.2s; text-decoration: none; }
+  .nav-center a:hover { color: var(--accent); }
+  .nav-sep { color: var(--accent); opacity: 0.6; margin: 0 18px; font-size: 1rem; }
+  .nav-logo { height: 38px; width: auto; object-fit: contain; display: block; border-radius: 3px; }
+  .nav-brand-text { font-family: 'Pirata One', serif; font-size: 1.2rem; color: var(--accent); letter-spacing: 0.08em; white-space: nowrap; }
+  .hamburger { display: none; background: none; border: none; color: var(--accent); font-size: 1.5rem; cursor: pointer; line-height: 1; padding: 4px; }
+
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-deep);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    transform: translateY(-100%);
+    transition: transform 0.35s ease;
+  }
+  .mobile-menu.open { transform: translateY(0); }
+  .mobile-menu a { font-family: "Inter", sans-serif; font-size: 1.2rem; color: var(--text); text-decoration: none; }
+  .mobile-menu a:hover { color: var(--accent); }
+
+  @media (max-width: 768px) {
+    .nav-center, .nav-cta { display: none; }
+    .hamburger { display: block; }
+    .nav-logo { height: 30px !important; }
+    .nav-brand-text { font-size: 1rem !important; }
+  }
+
+  /* ---------- Privacy content ---------- */
+  .privacy-wrap { max-width: 760px; margin: 0 auto; padding: 0 24px 120px; }
+  .back-link {
+    display: inline-block;
+    margin-top: 120px;
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-size: 0.9rem;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .back-link:hover { text-decoration: underline; }
+  .privacy-title {
+    font-family: "Pirata One", serif;
+    font-size: 2.5rem;
+    color: var(--accent);
+    text-align: center;
+    margin-top: 80px;
+    margin-bottom: 0;
+  }
+  .privacy-subtitle {
+    font-family: "Inter", sans-serif;
+    font-weight: 300;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 8px;
+    margin-bottom: 60px;
+  }
+  .privacy-intro {
+    font-family: "Inter", sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    color: var(--text);
+    line-height: 1.85;
+    margin-bottom: 0;
+  }
+  .privacy-section h2 {
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--accent);
+    margin-top: 48px;
+    margin-bottom: 12px;
+  }
+  .privacy-section p {
+    font-family: "Inter", sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    color: var(--text);
+    line-height: 1.85;
+    margin: 0;
+  }
+  .privacy-rule {
+    width: 100%;
+    height: 1px;
+    background: rgba(201, 150, 63, 0.2);
+    margin-top: 48px;
+    border: none;
+  }
+
+  /* ---------- Footer (identical to index.html) ---------- */
+  footer { position: relative; background: var(--bg-deep); border-top: 1px solid rgba(201, 150, 63, 0.15); padding: 32px 48px; overflow: hidden; }
+  footer::before { content: ''; position: absolute; inset: 0; background-image: var(--noise); opacity: 0.03; pointer-events: none; }
+  .footer-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .footer-copy { font-family: "Inter", sans-serif; font-weight: 300; font-size: 0.8rem; color: var(--muted); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-family: "Inter", sans-serif; font-weight: 400; color: var(--accent); }
+  .footer-links a:hover { text-decoration: underline; }
+  .footer-capsule img { max-height: 48px; border-radius: 4px; opacity: 0.7; }
+
+  @media (max-width: 768px) {
+    .footer-inner { flex-direction: column; text-align: center; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html#hero" style="display:flex; align-items:center; gap:12px; text-decoration:none; padding-left:24px;">
+      <img
+        class="nav-logo"
+        src="Madness_Afloat_Logo.jpg"
+        alt="Madness Afloat logo"
+      >
+      <span class="nav-brand-text">Madness Afloat</span>
+    </a>
+    <div class="nav-center">
+      <a href="index.html#about">About</a>
+      <span class="nav-sep">&middot;</span>
+      <a href="index.html#features">Features</a>
+      <span class="nav-sep">&middot;</span>
+      <a href="index.html#wishlist">Wishlist</a>
+    </div>
+    <a class="btn btn-primary nav-cta" href="https://store.steampowered.com/app/3095020/Madness_Afloat/" target="_blank" rel="noopener">Wishlist on Steam</a>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">&#9776;</button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html#about">About</a>
+  <a href="index.html#features">Features</a>
+  <a href="index.html#wishlist">Wishlist</a>
+  <a class="btn btn-primary" href="https://store.steampowered.com/app/3095020/Madness_Afloat/" target="_blank" rel="noopener">Wishlist on Steam</a>
+</div>
+
+<!-- ================= PRIVACY CONTENT ================= -->
+<div class="privacy-wrap">
+  <a class="back-link" href="index.html">&larr; Back to site</a>
+
+  <h1 class="privacy-title">Privacy Policy</h1>
+  <p class="privacy-subtitle" style="text-align:center;">Last updated: September 2026</p>
+
+  <p class="privacy-intro">We're a small indie team building Madness Afloat. We're not a big corporation, and this privacy policy reflects that &mdash; we'll be straight with you about what we collect, why, and what we do with it. Short version: we collect as little as possible and we don't sell anything to anyone.</p>
+
+  <hr class="privacy-rule">
+  <div class="privacy-section">
+    <h2>What We Collect</h2>
+    <p>When you download the beta, we may collect basic technical information to help us fix bugs and improve the game &mdash; things like your operating system version, crash logs, and general hardware specs. We don't collect your name, email, or any personal identifying information unless you choose to give it to us (for example, if you fill out a feedback form or join our Discord).</p>
+  </div>
+
+  <hr class="privacy-rule">
+  <div class="privacy-section">
+    <h2>What We Don't Do</h2>
+    <p>We don't sell your data. We don't share it with advertisers. We don't build profiles on you. We're making a game, not a data business.</p>
+  </div>
+
+  <hr class="privacy-rule">
+  <div class="privacy-section">
+    <h2>Discord &amp; Third-Party Links</h2>
+    <p>Our site links to Discord and Steam. Once you click those links, you're under their privacy policies, not ours. We don't control what they collect &mdash; check their respective policies if you're curious.</p>
+  </div>
+
+  <hr class="privacy-rule">
+  <div class="privacy-section">
+    <h2>Cookies</h2>
+    <p>This website doesn't use tracking cookies or analytics. It's a static promotional page &mdash; it just sits there and looks good.</p>
+  </div>
+
+  <hr class="privacy-rule">
+  <div class="privacy-section">
+    <h2>Beta Data</h2>
+    <p>During the beta, we may collect gameplay telemetry (which features you used, where crashes happened, session length) to help us understand what's working and what isn't. This data is anonymized and used only to improve the game. You can opt out in the beta settings.</p>
+  </div>
+
+  <hr class="privacy-rule">
+  <div class="privacy-section">
+    <h2>Contact</h2>
+    <p>If you have any questions about this policy, or want us to delete any data we might have about you, just reach out on Discord. We're real people and we'll actually respond.</p>
+  </div>
+
+  <hr class="privacy-rule">
+  <div class="privacy-section">
+    <h2>Changes</h2>
+    <p>If we update this policy, we'll post the new version here with an updated date at the top. We won't suddenly change the rules on you without telling you.</p>
+  </div>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-copy">&copy; 2026 Dynamic Box. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="https://store.steampowered.com/app/3095020/Madness_Afloat/" target="_blank" rel="noopener">Steam Page</a>
+      <a href="privacy.html" style="font-family:Inter, sans-serif; color:#c9963f; text-decoration:none; font-size:0.85rem;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Privacy Policy</a>
+    </div>
+    <div class="footer-capsule">
+      <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3095020/c7ef15234bc213905355ea5b62102e9715044187/capsule_616x353.jpg?t=1782801743" alt="Madness Afloat capsule thumbnail" loading="lazy">
+    </div>
+  </div>
+</footer>
+
+<script>
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > 60) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  });
+
+  var hamburger = document.getElementById('hamburger');
+  var mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', function () {
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', function () {
+      mobileMenu.classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>
